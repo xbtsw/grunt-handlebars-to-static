@@ -1,0 +1,46 @@
+{
+  "name": "grunt-handlebars-to-static",
+  "description": "grunt plugin to compile handlebars.js templates into static files",
+  "version": "0.1.0",
+  "homepage": "https://github.com/xbtsw/grunt-handlebars-to-static",
+  "author": {
+    "name": "Wei Chen",
+    "email": "xbtsw.chen@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xbtsw/grunt-handlebars-to-static.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xbtsw/grunt-handlebars-to-static/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/xbtsw/grunt-handlebars-to-static/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+  "dependencies": {
+    "extendify": "^0.1.0",
+    "handlebars": "^2.0.0-alpha.4",
+    "underscore": "^1.6.0"
+  }
+}
