@@ -8,7 +8,7 @@
 
 'use strict';
 var _ = require('underscore');
-var hb = requre('handlebars');
+var hb = require('handlebars');
 var extendify = require('extendify');
 var merge = extendify({
     inPlace: false,
@@ -34,13 +34,13 @@ function filter_non_function(obj, error_warn) {
 function is_function_map(obj) {
     return Object.keys(obj).reduce(function (prev, k) {
         return prev && _.isFunction(obj[k]);
-    }, true)
+    }, true);
 }
 
 function is_string_map(obj) {
     return Object.keys(obj).reduce(function (prev, k) {
         return prev && _.isString(obj[k]);
-    }, true)
+    }, true);
 }
 
 var is_helper = is_function_map;
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
                 //assume file obj here
                 var files = grunt.task.normalizeMultiTaskFiles(obj);
                 files = files.reduce(function (prev, file_group) {
-                    return prev.concat(normalize_file_path(file_group))
+                    return prev.concat(normalize_file_path(file_group));
                 }, []);
                 files = filter_non_exist_src_file(files);
                 files.map(function (f) {
@@ -149,7 +149,7 @@ module.exports = function (grunt) {
                 //assume file obj here
                 var files = grunt.task.normalizeMultiTaskFiles(obj);
                 files = files.reduce(function (prev, file_group) {
-                    return prev.concat(normalize_file_path(file_group))
+                    return prev.concat(normalize_file_path(file_group));
                 }, []);
                 files = filter_non_exist_src_file(files);
                 files.map(function (f) {
@@ -160,7 +160,7 @@ module.exports = function (grunt) {
                     //bunch of strings, needs compile
                     Object.keys(obj).map(function (k) {
                         partial_obj[k] = hb.compile(obj[k]);
-                    })
+                    });
                 }
             }
             return partial_obj;
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
         options.global_context.partials = process_partials(options.global_context.partials);
 
         // validate
-        if (['first', 'last'].indexOf(options.default_ext.extDot) == -1) {
+        if (['first', 'last'].indexOf(options.default_ext.extDot) === -1) {
             grunt.fail.fatal('options.default_ext.extDot invalid value: ' + options.default_ext.extDot);
         }
 
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
                             partials: context.partials
                         }));
                     grunt.log.writeln('File "' + file_obj.dest + '" created.');
-                })
-        })
+                });
+        });
     });
 };
