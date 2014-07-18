@@ -398,7 +398,7 @@ dev: {
 ...
 
 # SECURITY WARNING: don't run with debug turned on in production!
-{{if is_dev}}
+{{#if is_dev}}
 
 DEBUG = True
 
