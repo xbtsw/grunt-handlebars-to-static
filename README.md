@@ -39,6 +39,7 @@ To get started quickly, you can check out some [Examples](#usage-examples) of th
 
 #### options.global_context
 Type: `Object`
+
 Default value: 
 ```js
 {
@@ -52,6 +53,7 @@ The global [Context](#context) of handlebars execution for every template compil
 
 #### options.file_context
 Type: `Function`
+
 Default value: A function that returns `{}`
 
 A function that returns a file [Context](#context) of handlebars execution a template compilation. This gets merged
@@ -112,6 +114,7 @@ the final execution context will be
 
 #### options.default_ext.ext
 Type: `String`
+
 Default value: `'.html'`
 
 When you don't explicitly specify your output file extension (i.e. when you `dest` is a folder), this 
@@ -119,6 +122,7 @@ extension is assumed.
 
 #### options.default_ext.extDot
 Type: `String`
+
 Default value: `'first'`
 
 This has the same meaning as [Grunt extDot parameter](http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically)
@@ -183,7 +187,7 @@ file_context: function(){
 It's a useful way to modularize your template and data files.
 
 #### Context.helpers
-Type: 'Object'
+Type: `Object`
 
 This is the collection of helpers when executing handlebars, it can be one of the two forms
 
@@ -204,6 +208,8 @@ in this case, the `helper_name1` part will become the name of the helper, the fu
     This way, you can easily control the namespacing of your helpers, by simply using _Grunt file format_ setting approciate `dest`。 
 
 #### Context.partials
+
+Type: `Object`
 
 This is the collection of helpers when executing handlebars, it can be one of the three forms
 
