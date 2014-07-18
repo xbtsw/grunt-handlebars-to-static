@@ -32,8 +32,8 @@ grunt.initConfig({
 });
 ```
 
-To get started quickly, you can check out some [Examples](#Examples) of the task in action. Or you can dive into the 
-[Detailed Doc](#Options) to fully leverage the flexibility of this plugin.
+To get started quickly, you can check out some [Examples](#examples) of the task in action. Or you can dive into the 
+[Detailed Doc](#options) to fully leverage the flexibility of this plugin.
 
 ## Options
 
@@ -48,20 +48,20 @@ Default value:
 }
 ```
 
-The global [Context](#Context) of handlebars execution for every template compilation.
+The global [Context](#context) of handlebars execution for every template compilation.
 
 #### options.file_context
 Type: `Function`
 Default value: A function that returns `{}`
 
-A function that returns a file [Context](#Context) of handlebars execution a template compilation. This gets merged
+A function that returns a file [Context](#context) of handlebars execution a template compilation. This gets merged
 with `options.global_context` for each file before the final execution. The function signature is
 ```js
 function file_context(src, dest, global_context)
 ```
 * `src` is a string of current template file getting compiled
 * `dest` is a string of output path
-* `global_context` is a copy of `options.global_context`, the `helpers` and `partials` fields will be in their [1st form](#Context) as mentioned in Context section.
+* `global_context` is a copy of `options.global_context`, the `helpers` and `partials` fields will be in their [1st form](#context) as mentioned in Context section.
 
 The return value of the function is then [deep merged](http://lodash.com/docs#merge) with `options.global_context` before applied to the template, that means any primitive field exist both `options.global_context` and `options.file_context()`, the latter will have precedence. For example:
 
@@ -197,7 +197,7 @@ This is the collection of helpers when executing handlebars, it can be one of th
 ```
 in this case, the `helper_name1` part will become the name of the helper, the function itself is the helper code.
 
-* Any of the three formats of [Grunt file format](http://gruntjs.com/configuring-tasks#files), however subject to [One-to-one restriction](#One-to-one-restriction)
+* Any of the three formats of [Grunt file format](http://gruntjs.com/configuring-tasks#files), however subject to [One-to-one restriction](#one-to-one-restriction)
 
 	in this case, the `src` file is expected to be a nodejs module that export a single function to be used as the helper function, and `desc` will be converted to a dot-separated namespace, extension stripped. The extension stripping will respect the `extDot` option carried by the _Grunt file format_  itself, or as defined by `options.default_ext.extDot` when applicable. For example, a `dest` of `hp/navbar/item/makeitem.js` will be converted to `hp.navbar.item.makeitem` and be referenced in template as `{{hp.navbar.item.makeitem}}`.
     
@@ -225,7 +225,7 @@ in this case, the `partial_name1` part will become the name of the partial, the 
 }
 ```
 in this case, the `partial_name1` part will become the name of the partial, the function should be partial in `string`.
-* Any of the three formats of [Grunt file format](http://gruntjs.com/configuring-tasks#files), however subject to [One-to-one restriction](#One-to-one-restriction)
+* Any of the three formats of [Grunt file format](http://gruntjs.com/configuring-tasks#files), however subject to [One-to-one restriction](#one-to-one-restriction)
 
 	in this case the `src` expect to be a partial in a file, the `dest` will be converted to a dot-separated namespace, extension stripped, in the same fashion as `Context.helpers`
     

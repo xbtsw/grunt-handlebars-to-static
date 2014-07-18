@@ -1,7 +1,7 @@
 {
   "name": "grunt-handlebars-to-static",
   "description": "grunt plugin to compile handlebars.js templates into static files",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/xbtsw/grunt-handlebars-to-static",
   "author": {
     "name": "Wei Chen",
