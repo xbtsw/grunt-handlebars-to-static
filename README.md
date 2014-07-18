@@ -127,8 +127,8 @@ when applying ` options.default_ext.ext`
 ### Context
 
 A `Context` is a object have `data`, `helpers` and `partials` field, 
-[options.global_context](#options.global_context) is a `Context`, the return value of 
-[options.file_context](#options.file_context) is a `Context` too.
+[options.global_context](#optionsglobal_context) is a `Context`, the return value of 
+[options.file_context](#optionsfile_context) is a `Context` too.
 
 #### Context.data
 Type: `Object`
