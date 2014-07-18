@@ -392,7 +392,7 @@ dev: {
 ```
 
 ### Non html files
-```python
+```
 # Django settings.py
 
 ...
