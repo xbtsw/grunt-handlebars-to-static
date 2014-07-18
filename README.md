@@ -32,7 +32,7 @@ grunt.initConfig({
 });
 ```
 
-To get started quickly, you can check out some [Examples](#examples) of the task in action. Or you can dive into the 
+To get started quickly, you can check out some [Examples](#usage-examples) of the task in action. Or you can dive into the 
 [Detailed Doc](#options) to fully leverage the flexibility of this plugin.
 
 ## Options
