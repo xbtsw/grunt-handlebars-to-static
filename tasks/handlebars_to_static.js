@@ -15,11 +15,26 @@ var merge = extendify({
     arrays: 'replace'
 });
 
-// would be nice if this is exposed by grunt
+// would be nice if below are exposed by grunt
 var extDotRe = {
     first: /(\.[^\/]*)?$/,
     last: /(\.[^\/\.]*)?$/
 };
+// Windows?
+var win32 = process.platform === 'win32';
+
+// Normalize \\ paths to / paths.
+var unixifyPath = function(filepath) {
+    if (win32) {
+        return filepath.replace(/\\/g, '/');
+    } else {
+        return filepath;
+    }
+};
+
+function get_cwd(){
+    return unixifyPath(process.cwd());
+}
 
 function filter_non_function(obj, error_warn) {
     Object.keys(obj).map(function (k) {
@@ -43,10 +58,16 @@ function is_string_map(obj) {
     }, true);
 }
 
-var is_helper = is_function_map;
+function is_file_group(obj) {
+    return _.isArray(obj.src) && _.isString(obj.dest);
+}
+
+function is_helper(obj){
+    return is_function_map(obj) && !is_file_group(obj);
+}
 
 var is_partial = function (obj) {
-    return is_function_map(obj) || is_string_map(obj);
+    return (is_function_map(obj) || is_string_map(obj)) && !is_file_group(obj);
 };
 
 function is_dest_folder(dest) {
@@ -59,10 +80,22 @@ function make_namespace(file_obj) {
     var ext_dot = file_obj.extDot ? file_obj.extDot : 'first';
     return file_obj.dest
         .replace(extDotRe[ext_dot], '')
-        .replace('/', '.');
+        .replace(/\//g, '.');
 }
 
 module.exports = function (grunt) {
+
+    function check_file_group(obj){
+        if (!is_file_group(obj)){
+            grunt.fail.fatal(JSON.stringify(obj) + 'is not a valid file definition group, check if forgot "src" or "desc"?');
+        }
+    }
+
+    function make_absolute(path){
+        if(!grunt.file.isPathAbsolute(path)){
+            return get_cwd() + '/' + path;
+        }
+    }
 
     function filter_non_exist_src_file(file_objs) {
         return file_objs.filter(function (file) {
@@ -95,27 +128,31 @@ module.exports = function (grunt) {
         });
 
         function normalize_file_path(file_group) {
+            // do some checking first since normalizeMultiTaskFiles is not fail safe
+            check_file_group(file_group);
             // few possibilities here.
-            if (_.isArray(file_group.src) && is_dest_folder(file_group.dest)) {
+            if (file_group.src.length > 1 && is_dest_folder(file_group.dest)) {
                 //preserve folder structure and substitute extension
                 return file_group.src.map(function (src) {
                     return {
                         src: src,
-                        dest: file_group.dest + file_group.src.replace(extDotRe[options.default_ext.extDot], options.default_ext.ext),
+                        dest: file_group.dest + src.replace(extDotRe[options.default_ext.extDot], options.default_ext.ext),
                         extDot: options.default_ext.extDot
                     };
                 });
-            } else if (_.isArray(file_group.src) && !is_dest_folder(file_group.dest)) {
+            } else if (file_group.src.length > 1 && !is_dest_folder(file_group.dest)) {
                 grunt.fail.fatal('Cannot compile multiple src files into a single dest ' + file_group.dest);
-            } else {
+            } else if (file_group.src.length === 1 && !is_dest_folder(file_group.dest)) {
                 //an "extended" file group here
                 return [
                     {
-                        src: file_group.src,
+                        src: file_group.src[0],
                         dest: file_group.dest,
                         extDot: file_group.orig.extDot
                     }
                 ];
+            } else {
+                grunt.fail.fatal('Cannot understand the file input format for dest ' + file_group.dest);
             }
         }
 
@@ -129,8 +166,8 @@ module.exports = function (grunt) {
                     return prev.concat(normalize_file_path(file_group));
                 }, []);
                 files = filter_non_exist_src_file(files);
-                files.map(function (f) {
-                    helper_obj[make_namespace(f)] = require(f.src);
+                files.map(function (file_obj) {
+                    helper_obj[make_namespace(file_obj)] = require(make_absolute(file_obj.src));
                 });
             } else {
                 helper_obj = obj;
@@ -179,13 +216,36 @@ module.exports = function (grunt) {
         this.files.map(function (file_group) {
             normalize_file_path(file_group)
                 .map(function (file_obj) {
-                    var file_context = options.file_context(file_obj.src, file_obj.dest);
+                    var src = file_obj.src;
+                    var dest = file_obj.dest;
+                    var file_context = {
+                        data: {},
+                        helpers: {},
+                        partials: {},
+                        src: false,
+                        desc: false
+                    };
+                    _.extend(file_context, options.file_context(
+                        src,
+                        dest,
+                        merge({}, options.global_context)
+                    ));
+
+                    if (file_context.src){
+                        src = file_context.src;
+                    }
+                    if (file_context.dest){
+                        dest = file_context.dest;
+                    }
+                    delete file_context.src;
+                    delete file_context.dest;
+
                     file_context.helpers = process_helpers(file_context.helpers);
                     file_context.partials = process_partials(file_context.partials);
                     var context = merge(options.global_context, file_context);
                     grunt.file.write(
-                        file_obj.dest,
-                        hb.compile(grunt.file.read(file_obj.src))(context.data, {
+                        dest,
+                        hb.compile(grunt.file.read(src))(context.data, {
                             helpers: context.helpers,
                             partials: context.partials
                         }));
