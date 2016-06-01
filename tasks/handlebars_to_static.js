@@ -204,8 +204,8 @@ module.exports = function (grunt) {
         }
 
         // process global context once here
-        options.global_context.helpers = process_helpers(options.global_context.helpers);
-        options.global_context.partials = process_partials(options.global_context.partials);
+        if(options.global_context.helpers) options.global_context.helpers = process_helpers(options.global_context.helpers);
+        if(options.global_context.partials) options.global_context.partials = process_partials(options.global_context.partials);
 
         // validate
         if (['first', 'last'].indexOf(options.default_ext.extDot) === -1) {
