@@ -131,7 +131,7 @@ module.exports = function (grunt) {
             // do some checking first since normalizeMultiTaskFiles is not fail safe
             check_file_group(file_group);
             // few possibilities here.
-            if (file_group.src.length > 1 && is_dest_folder(file_group.dest)) {
+            if (file_group.src.length >= 1 && is_dest_folder(file_group.dest)) {
                 //preserve folder structure and substitute extension
                 return file_group.src.map(function (src) {
                     return {
@@ -204,8 +204,8 @@ module.exports = function (grunt) {
         }
 
         // process global context once here
-        options.global_context.helpers = process_helpers(options.global_context.helpers);
-        options.global_context.partials = process_partials(options.global_context.partials);
+        if(options.global_context.helpers) options.global_context.helpers = process_helpers(options.global_context.helpers);
+        if(options.global_context.partials) options.global_context.partials = process_partials(options.global_context.partials);
 
         // validate
         if (['first', 'last'].indexOf(options.default_ext.extDot) === -1) {
